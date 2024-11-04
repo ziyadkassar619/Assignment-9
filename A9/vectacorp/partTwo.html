@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery Lab</title>
+    <script src="scripts/jquery.min.js"></script>
+    <style>
+        .interactive-div {
+            width: 400px;
+            height: 400px;
+            background-color: #f0f0f0;
+            margin-top: 20px;
+        }
+        .message {
+            display: block;
+            margin-top: 10px;
+        }
+        .error {
+            border-color: red;
+        }
+        .success {
+            border-color: green;
+        }
+    </style>
+</head>
+<body>
+    <button id="clickButton">Click Me (Click Method)</button>
+    <button id="bindButton">Click Me (Bind Method)</button>
+    <button id="onButton">Click Me (On Method)</button>
+    <button id="multiButton1">Multi Button 1</button>
+    <button id="multiButton2">Multi Button 2</button>
+    
+    <div class="interactive-div" id="interactiveDiv">Hover or Click Me</div>
+    <span id="messageSpan" class="message"></span>
+    
+    <a href="https://modulemedia.com" id="preventLink">Go to Module Media</a>
+    
+    <div id="windowSizeDiv"></div>
+    
+    <input type="text" id="focusInput" placeholder="Type here...">
+    
+    <form id="userForm">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name">
+        
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email">
+        
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        $(document).ready(function() {
+            $("#clickButton").click(function() {
+                alert("The .click() button has been clicked");
+            });
+
+            $("#bindButton").bind("click", function() {
+                alert("The .bind() button has been clicked");
+            });
+
+            $("#onButton").on("click", function() {
+                alert("The .on() button has been clicked");
+            });
+
+            $("#multiButton1, #multiButton2").on("click", function() {
+                alert("A multibutton has been clicked");
+            });
+
+            $("#interactiveDiv").css({
+                "width": "400px",
+                "height": "400px"
+            }).on("click", function() {
+                alert("The div was clicked");
+            }).on("mouseenter", function() {
+                alert("Mouse entered the div");
+            }).on("mouseleave", function() {
+                alert("Mouse left the div");
+            });
+
+            $("#interactiveDiv").on("click", function() {
+                $("#messageSpan").text("The div was clicked");
+            }).on("mouseenter", function() {
+                $("#messageSpan").text("Mouse entered the div");
+            }).on("mouseleave", function() {
+                $("#messageSpan").text("Mouse left the div");
+            });
+
+            $("#preventLink").on("click", function(event) {
+                event.preventDefault();
+                $(this).css("color", "red");
+                alert("Event triggered by: " + event.target.nodeName);
+            });
+
+            function updateWindowSize() {
+                $("#windowSizeDiv").text("Width: " + $(window).width() + ", Height: " + $(window).height());
+            }
+            $(window).on("resize", updateWindowSize);
+            updateWindowSize();
+
+            $("#focusInput").on("focus", function() {
+                $(this).css("background-color", "lightgray");
+            }).on("blur", function() {
+                $(this).css("background-color", "white");
+            });
+
+            $("#userForm").on("submit", function(event) {
+                event.preventDefault();
+                let isValid = true;
+
+                if ($("#name").val() === "") {
+                    $("#name").addClass("error").removeClass("success");
+                    isValid = false;
+                } else {
+                    $("#name").addClass("success").removeClass("error");
+                }
+
+                if ($("#email").val() === "") {
+                    $("#email").addClass("error").removeClass("success");
+                    isValid = false;
+                } else {
+                    $("#email").addClass("success").removeClass("error");
+                }
+
+                if (!isValid) {
+                    alert("Both fields are required.");
+                }
+            });
+        });
+    </script>
+</body>
+</html>
